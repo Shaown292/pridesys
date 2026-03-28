@@ -15,7 +15,7 @@ class CharacterRepository {
     try {
       final apiData = await remote.fetchCharacters();
 
-      // ✅ cache
+      // ✅ cache data
       await local.cacheCharacters(apiData);
 
       return _map(apiData);
@@ -23,7 +23,9 @@ class CharacterRepository {
       // ✅ fallback to cache
       final cached = local.getCachedCharacters();
 
-      if (cached.isEmpty) rethrow;
+      if (cached.isEmpty) {
+        throw Exception("No internet & no cached data");
+      }
 
       return _map(cached);
     }

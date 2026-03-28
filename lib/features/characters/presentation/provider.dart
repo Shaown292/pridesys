@@ -10,25 +10,23 @@ import '../domain/character.dart';
 final apiClientProvider = Provider((ref) => ApiClient());
 
 final remoteProvider = Provider(
-      (ref) => CharacterRemoteSource(ref.read(apiClientProvider)),
+  (ref) => CharacterRemoteSource(ref.read(apiClientProvider)),
 );
 
 final localProvider = Provider(
-      (ref) => CharacterLocalSource(Hive.box<Map>('characters')),
+  (ref) => CharacterLocalSource(Hive.box<Map>('characters')),
 );
 
 final repositoryProvider = Provider(
-      (ref) => CharacterRepository(
-    ref.read(remoteProvider),
-    ref.read(localProvider),
-  ),
+  (ref) =>
+      CharacterRepository(ref.read(remoteProvider), ref.read(localProvider)),
 );
 
 /// 🔥 MAIN LIST (offline-first)
 final characterListProvider =
 FutureProvider<List<Character>>((ref) async {
   final repo = ref.read(repositoryProvider);
-  return repo.getCharacters();
+  return repo.getCharacters(); // ✅ NOT direct API
 });
 
 /// 🔥 DETAIL PROVIDER (from cache)
@@ -38,5 +36,4 @@ Provider.family<Character?, int>((ref, id) {
   return repo.getCharacterById(id);
 });
 
-final editCharacterProvider =
-Provider((ref) => ref.read(repositoryProvider));
+final editCharacterProvider = Provider((ref) => ref.read(repositoryProvider));
