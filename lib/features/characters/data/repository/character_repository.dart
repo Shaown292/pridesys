@@ -51,7 +51,24 @@ class CharacterRepository {
       gender: e.gender,
       episode: e.episode,
       created: e.created,
-      originName: e.origin.name,
+      originName: e.originName,
     );
+  }
+
+  Future<void> updateCharacter(Character character) async {
+    final model = CharacterModel(
+      id: character.id,
+      name: character.name,
+      status: character.status,
+      species: character.species,
+      type: character.type,
+      gender: character.gender,
+      image: character.image,
+      episode: character.episode,
+      created: character.created,
+      originName: character.originName,
+    );
+
+    await local.updateCharacter(model);
   }
 }

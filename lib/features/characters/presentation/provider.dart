@@ -37,3 +37,6 @@ Provider.family<Character?, int>((ref, id) {
   final repo = ref.read(repositoryProvider);
   return repo.getCharacterById(id);
 });
+
+final editCharacterProvider =
+Provider((ref) => ref.read(repositoryProvider));

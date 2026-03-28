@@ -27,4 +27,8 @@ class CharacterLocalSource {
 
     return CharacterModel.fromJson(Map<String, dynamic>.from(data));
   }
+
+  Future<void> updateCharacter(CharacterModel character) async {
+    await box.put(character.id, character.toJson());
+  }
 }

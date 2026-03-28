@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pridesys/features/characters/presentation/pages/edit_character_page.dart';
 
 import '../provider.dart';
 
@@ -21,124 +22,153 @@ class CharacterDetailPage extends ConsumerWidget {
     final isAlive = character.status.toLowerCase() == "alive";
 
     return Scaffold(
-      body: Stack(
-        children: [
-          /// 🌌 Background Gradient
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF141E30), Color(0xFF243B55)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            /// 🌌 Background Gradient
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF141E30), Color(0xFF243B55)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
             ),
-          ),
-
-          /// 📜 Scrollable Content
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                /// 🖼️ Image + Back Button
-                Stack(
-                  children: [
-                    Hero(
-                      tag: character.id,
-                      child: Image.network(
-                        character.image,
-                        height: 350,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-
-                    Positioned(
-                      top: 40,
-                      left: 16,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.black54,
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          color: Colors.white,
-                          onPressed: () => Navigator.pop(context),
+        
+            /// 📜 Scrollable Content
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  /// 🖼️ Image + Back Button
+                  Stack(
+                    children: [
+                      Hero(
+                        tag: character.id,
+                        child: Image.network(
+                          character.image,
+                          height: 350,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-
-                /// 📦 Info Card
-                Transform.translate(
-                  offset: const Offset(0, -40),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white24),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// 🧑 Name + Status Dot
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                character.name,
-                                style: const TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+        
+                      Positioned(
+                        top: 40,
+                        left: 16,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black54,
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            color: Colors.white,
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+        
+                  /// 📦 Info Card
+                  Transform.translate(
+                    offset: const Offset(0, -40),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white24),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// 🧑 Name + Status Dot
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  character.name,
+                                  style: const TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Icon(
-                              Icons.circle,
-                              size: 12,
-                              color: isAlive ? Colors.green : Colors.red,
-                            ),
-                          ],
-                        ),
+                              Icon(
+                                Icons.circle,
+                                size: 12,
+                                color: isAlive ? Colors.green : Colors.red,
+                              ),
+                            ],
+                          ),
+        
+                          const SizedBox(height: 10),
+        
+                          /// 🎬 Episode Count
+                          _chip("Episodes: ${character.episode.length }"),
+        
+                          const SizedBox(height: 10),
+        
+                          /// 🏷️ Tags
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: [
+                              _chip(character.species),
+                              _chip(character.gender),
+                              if (character.type.isNotEmpty)
+                                _chip(character.type),
+                            ],
+                          ),
+        
+                          const SizedBox(height: 20),
+        
+                          /// 🌍 Origin
+                          _sectionTitle("Origin"),
+                          _info(character.originName),
+        
+                          const SizedBox(height: 20),
+        
+                          /// 🕒 Created
+                          _sectionTitle("Created"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _info(character.created),
+                              InkWell(
+                                onTap: ()=>Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        EditCharacterPage(id: id)
+                                  ),
+                                ),
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white.withOpacity(0.8),
+                                  ),
+                                  child: Text("Edit"),
+                                ),
+                              ),
+                            ],
+                          ),
 
-                        const SizedBox(height: 10),
 
-                        /// 🎬 Episode Count
-                        _chip("Episodes: ${character.episode.length }"),
 
-                        const SizedBox(height: 10),
-
-                        /// 🏷️ Tags
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            _chip(character.species),
-                            _chip(character.gender),
-                            if (character.type.isNotEmpty)
-                              _chip(character.type),
-                          ],
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        /// 🌍 Origin
-                        _sectionTitle("Origin"),
-                        _info(character.originName),
-
-                        const SizedBox(height: 20),
-
-                        /// 🕒 Created
-                        _sectionTitle("Created"),
-                        _info(character.created),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  
+
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

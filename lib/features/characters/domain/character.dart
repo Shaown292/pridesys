@@ -22,4 +22,30 @@ class Character {
     required this.created,
     required this.originName,
   });
+
+  Character copyWith({
+    String? name,
+    String? status,
+    String? species,
+    String? type,
+    String? gender,
+    String? image,
+    List<String>? episode,
+    String? created,
+    String? originName,
+  }) {
+    return Character(
+      id: id,
+      name: name ?? this.name,
+      status: status ?? this.status,
+      species: species ?? this.species,
+      type: type ?? this.type,
+      gender: gender ?? this.gender,
+      image: image ?? this.image,
+      episode: episode ?? this.episode,
+      created: created ?? this.created,
+      originName: originName ?? this.originName,
+    );
+  }
+
 }
