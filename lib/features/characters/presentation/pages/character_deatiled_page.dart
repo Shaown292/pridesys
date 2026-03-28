@@ -50,6 +50,12 @@ class CharacterDetailPage extends ConsumerWidget {
                           height: 350,
                           width: double.infinity,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'assets/images/offline.png',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         ),
                       ),
         

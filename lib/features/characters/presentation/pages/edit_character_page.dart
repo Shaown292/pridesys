@@ -57,7 +57,21 @@ class _EditCharacterPageState
             /// 🔥 Avatar
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(character.image),
+              backgroundColor: Colors.grey.shade200,
+              child: ClipOval(
+                child: Image.network(
+                  character.image,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/offline.png',
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 16),
 

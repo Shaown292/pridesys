@@ -57,6 +57,12 @@ class CharacterListPage extends ConsumerWidget {
                             character.image,
                             fit: BoxFit.cover,
                             width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/offline.png',
+                                fit: BoxFit.cover,
+                              );
+                            },
                           ),
                         ),
                       ),
